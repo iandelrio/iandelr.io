@@ -48,4 +48,5 @@
     border: none !important; /* if you want to remove borders at all*/
     outline: none !important;
     box-shadow: none !important;
+    padding:0px;
 }

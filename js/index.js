@@ -1,11 +1,16 @@
 
 document.addEventListener("DOMContentLoaded", function () {
+    arrowKeyNav();
+    cellInput();
+});
+
+function arrowKeyNav() {
     const sudokuGrid = document.getElementById("sudoku-grid");
 
     sudokuGrid.addEventListener("keydown", (event) => {
 
         let currentInput = sudokuGrid.querySelector("input");
-        if (document.activeElement.classList.contains("sudoku-cell")) { 
+        if (document.activeElement.classList.contains("sudoku-cell")) {
             currentInput = document.activeElement
         }
         const key = event.key;
@@ -39,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             return false;
         }
-    
+
         function moveDown() {
             const currentRowIndex = currentInput.parentNode.parentNode.rowIndex;
             if (currentRowIndex < sudokuGrid.rows.length - 1) {
@@ -48,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             return false;
         }
-    
+
         function moveLeft() {
             const currentCellIndex = currentInput.parentNode.cellIndex;
             if (currentCellIndex > 0) {
@@ -57,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             return false;
         }
-    
+
         function moveRight() {
             const currentCellIndex = currentInput.parentNode.cellIndex;
             if (currentCellIndex < currentInput.parentNode.parentNode.cells.length - 1) {
@@ -68,6 +73,42 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
     });
+}
 
-    
-});
+function cellInput() {
+    const sudokuGrid = document.getElementById("sudoku-grid");
+    sudokuGrid.addEventListener("keydown", (event) => {
+        const key = event.key;
+
+        // check if input is not a number
+        if (key === "Backspace") {
+            // allow keypress to occur
+
+        } else if (isNaN(key)) {
+            event.preventDefault();
+
+        } else {
+            // get current cell / input
+            let currentInput = sudokuGrid.querySelector("input");
+            if (document.activeElement.classList.contains("sudoku-cell")) {
+                currentInput = document.activeElement
+            }
+
+            // check cell input mode
+            let inputMode = document.querySelector('input[name="cell-input-mode"]:checked').value
+            if (inputMode === "original") {
+                // remove user-input class
+                currentInput.classList.remove("user-input")
+
+            } else if (inputMode === "user") {
+                // add user-input class
+                currentInput.classList.add("user-input")
+            }
+
+            // replace value in cell
+            currentInput.value = ""
+            // allow keypress to occur
+        }
+
+    });
+}

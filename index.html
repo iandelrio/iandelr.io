@@ -23,11 +23,12 @@
         <div class="row">
             <div class="col-sm-1">
             </div>
-            <div class="col-sm-5">
+            <div class="col-sm-5 text-center">
                 <table class="table table-sm" id="sudoku-grid">
                     <tbody>
                         <tr>
-                            <td><input type="text" class="form-control sudoku-cell" maxlength="1" autofocus="autofocus"></td>
+                            <td><input type="text" class="form-control sudoku-cell" maxlength="1" autofocus="autofocus">
+                            </td>
                             <td><input type="text" class="form-control sudoku-cell" maxlength="1"></td>
                             <td><input type="text" class="form-control sudoku-cell" maxlength="1"></td>
                             <td><input type="text" class="form-control sudoku-cell" maxlength="1"></td>
@@ -127,18 +128,36 @@
                         </tr>
                     </tbody>
                 </table>
-                <p>[Toggle]</p>
-                <button type="button" class="btn btn-secondary">Solve Puzzle</button>
+
+                
+
+                <fieldset>
+                    <legend>Input Mode</legend>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1"
+                            value="original">
+                        <label class="form-check-label" for="inlineRadio1">Original Numbers</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2"
+                            value="user">
+                        <label id="user-numbers-label" class="form-check-label" for="inlineRadio2">User Numbers</label>
+                    </div>
+                </fieldset>
+                <p></p>
+                <button type="button" class="btn btn-secondary"> Help Me! </button>
+                <p></p>
             </div>
             <div class="col-sm-1">
             </div>
             <div class="col-sm-4">
                 <h3>Step 1</h3>
-                <p>Enter puzzle values as they were before you started solving</p>
+                <p>Enter the original numbers that were in the puzzle before you started solving...</p>
                 <h3>Step 2</h3>
-                <p>Enter your numbers</p>
+                <p>Toggle the "Input Mode" switch and add your numbers...</p>
                 <h3>Step 3</h3>
-                <p>Solve puzzle!</p>
+                <p>Hit the "Help Me!" button and see where you went wrong!</p>
             </div>
         </div>
     </div>

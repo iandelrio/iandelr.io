@@ -1,17 +1,3 @@
-/* #sudoku-grid td {
-    aspect-ratio: 1 / 1;
-    text-align: center;
-    vertical-align: middle;
-}
-
-#sudoku-grid td .content {
-    aspect-ratio: 1 / 1;
-} */
-
-/* #sudoku-grid table {
-    margin: 1em auto;
-} */
-
 #sudoku-grid {
     aspect-ratio: 1 / 1;
 }
@@ -45,8 +31,26 @@
     vertical-align: middle;
     width: 100%;
     height: 100%;
-    border: none !important; /* if you want to remove borders at all*/
+    border: none !important;
+    /* if you want to remove borders at all*/
     outline: none !important;
     box-shadow: none !important;
-    padding:0px;
+    padding: 0px;
+}
+
+fieldset {
+    border: solid 1px
+}
+
+legend {
+    font-size: 1.2em;
+}
+
+.form-check-label {
+    font-size: 0.9em
+}
+
+#user-numbers-label {
+    font-style: italic;
+    color: blue;
 }

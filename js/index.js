@@ -112,3 +112,47 @@ function cellInput() {
 
     });
 }
+
+// outer function
+function sudokuSolver() {
+    const sudokuGrid = document.getElementById("sudoku-grid")
+    let originalArr, completeArr = []
+    originalArr = getArrayFromSudoku(sudokuGrid, true)
+    completeArr = getArrayFromSudoku(sudokuGrid, false)
+    originalArr = solveSudoku(originalArr)
+    outputArrayToSudokuGrid(originalArr)
+    return true
+}
+/**
+ * Function to convert table element representing sudoku board to array
+ * @param {table} tableElem Table element representing sudoku board
+ * @param {boolean} inputType True to pull original numbers only, otherwise pull all numbers
+ * @return {array[num]} A 1D array holding numbers in sudoku board
+ */
+function getArrayFromSudoku(tableElem, inputType) {
+    let arr = []
+    let cells = tableElem.getElementsByTagName('input')
+    let cellVal = 0
+    Array.from(cells).forEach(cell => {
+        if (cell.value === '') {
+            cellVal = 0
+        } else if (inputType && cell.classList.contains("user-input")) {
+            cellVal = 0
+        } else {
+            cellVal = Number(cell.value)
+        }
+        arr.push(cellVal)
+    });
+    return arr
+}
+
+function outputArrayToSudokuGrid(arr) {
+    // output array as sudoku
+    return
+}
+
+// actually solve sudoku
+function solveSudoku(arr) {
+
+    return arr
+}

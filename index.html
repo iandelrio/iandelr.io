@@ -24,11 +24,12 @@
             <div class="col-sm-1">
             </div>
             <div class="col-sm-4 text-center">
+                <!-- ID POS CONVENTION - Y X, I.E. ROW COLUMN -->
                 <table class="table table-sm" id="sudoku-grid">
                     <tbody>
-                        <!-- ID CONVENTION - Y X, I.E. ROW COLUMN -->
                         <tr>
-                            <td><input id="pos00" type="text" class="form-control sudoku-cell" maxlength="1" autofocus="autofocus"></td>
+                            <td><input id="pos00" type="text" class="form-control sudoku-cell" maxlength="1"
+                                    autofocus="autofocus"></td>
                             <td><input id="pos01" type="text" class="form-control sudoku-cell" maxlength="1"></td>
                             <td><input id="pos02" type="text" class="form-control sudoku-cell" maxlength="1"></td>
                             <td><input id="pos03" type="text" class="form-control sudoku-cell" maxlength="1"></td>
@@ -143,7 +144,9 @@
                     </div>
                 </fieldset>
                 <p></p>
-                <button type="button" class="btn btn-secondary"> Help Me! </button>
+                <div class="d-grid">
+                    <button type="button" class="btn btn-secondary" onclick="sudokuSolver()"> Help Me! </button>
+                </div>
                 <p></p>
             </div>
             <div class="col-sm-1">

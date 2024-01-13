@@ -145,9 +145,13 @@
                 </fieldset>
                 <p></p>
                 <div class="d-grid">
-                    <button type="button" class="btn btn-secondary" onclick="sudokuSolver()"> Help Me! </button>
+                    <button type="button" class="btn btn-secondary" onclick="sudokuHelper()"> Help Me! </button>
                 </div>
-                <p></p>
+                <p id="sudokuHelperFeedback"></p>
+                <div class="d-grid">
+                    <button type="button" class="btn btn-secondary" onclick="sudokuSolution()"> Show Solution </button>
+                </div>
+                <p id="sudokuSolutionFeedback"></p>
             </div>
             <div class="col-sm-1">
             </div>
@@ -158,6 +162,8 @@
                 <p>Toggle the "Input Mode" switch and add your numbers...</p>
                 <h3>Step 3</h3>
                 <p>Hit the "Help Me!" button to see where you went wrong!</p>
+                <h3>(Optional)</h3>
+                <p>Hit the "Show Solution" button to display puzzle solution</p>
             </div>
         </div>
     </div>

@@ -91,11 +91,11 @@ function cellInput() {
             // get current cell / input
             let currentInput = sudokuGrid.querySelector("input");
             if (document.activeElement.classList.contains("sudoku-cell")) {
-                currentInput = document.activeElement
+                currentInput = document.activeElement;
             }
 
             // check cell input mode
-            let inputMode = document.querySelector('input[name="cell-input-mode"]:checked').value
+            let inputMode = document.querySelector('input[name="cell-input-mode"]:checked').value;
             if (inputMode === "original") {
                 // remove user-input class
                 currentInput.classList.remove("user-input")
@@ -105,54 +105,88 @@ function cellInput() {
                 currentInput.classList.add("user-input")
             }
 
-            // replace value in cell
-            currentInput.value = ""
+            // delete current value in cell
+            currentInput.value = '';
             // allow keypress to occur
         }
 
     });
 }
 
-// outer function
-function sudokuSolver() {
-    const sudokuGrid = document.getElementById("sudoku-grid")
-    let originalArr, completeArr = []
-    originalArr = getArrayFromSudoku(sudokuGrid, true)
-    completeArr = getArrayFromSudoku(sudokuGrid, false)
-    originalArr = solveSudoku(originalArr)
-    outputArrayToSudokuGrid(originalArr)
-    return true
+function sudokuHelper() {
+    removeFeedback();
+    const sudokuGrid = document.getElementById("sudoku-grid");
+    let originalArr, completeArr = [];
+    originalArr = getArrayFromSudoku(sudokuGrid, true);
+    completeArr = getArrayFromSudoku(sudokuGrid, false);
+    originalArr = solveSudoku(originalArr);
+    if (originalArr = false) {
+        // assume all errors mean sudoku is unsolvable
+        displayFeedback("Puzzle cannot be solved", true);
+    }
+    // compare difference between two arrays, if no difference "right track", else highlight problem cells
 }
+
+function sudokuSolution() {
+    removeFeedback();
+    const sudokuGrid = document.getElementById("sudoku-grid");
+    let originalArr, completeArr = [];
+    originalArr = getArrayFromSudoku(sudokuGrid, true);
+    originalArr = solveSudoku(originalArr);
+    if (originalArr = false) {
+        // assume all errors mean sudoku is unsolvable
+        displayFeedback("Puzzle cannot be solved", false);
+        return;
+    }
+    // iterate through inputs, remove "user-input" class, fill in cell vals with solution
+}
+
 /**
  * Function to convert table element representing sudoku board to array
  * @param {table} tableElem Table element representing sudoku board
  * @param {boolean} inputType True to pull original numbers only, otherwise pull all numbers
- * @return {array[num]} A 1D array holding numbers in sudoku board
+ * @return {Array[Number]} A 1D array holding numbers in sudoku board
  */
 function getArrayFromSudoku(tableElem, inputType) {
-    let arr = []
-    let cells = tableElem.getElementsByTagName('input')
-    let cellVal = 0
+    let arr = [];
+    let cells = tableElem.getElementsByTagName('input');
+    let cellVal = 0;
     Array.from(cells).forEach(cell => {
         if (cell.value === '') {
-            cellVal = 0
+            cellVal = 0;
         } else if (inputType && cell.classList.contains("user-input")) {
-            cellVal = 0
+            cellVal = 0;
         } else {
-            cellVal = Number(cell.value)
+            cellVal = Number(cell.value);
         }
-        arr.push(cellVal)
+        arr.push(cellVal);
     });
-    return arr
+    return arr;
 }
 
-function outputArrayToSudokuGrid(arr) {
-    // output array as sudoku
-    return
+/**
+ * Function to display puzzle feedback message
+ * @param {string} msg Message to display
+ * @param {boolean} sourceButton True if called from sudokuHelper, False if from sudokuSolution
+ */
+function displayFeedback(msg, sourceButton) {
+    if (sourceButton) {
+        document.getElementById("sudokuHelperFeedback").innerHTML = msg;
+    } else {
+        document.getElementById("sudokuSolutionFeedback").innerHTML = msg;
+    }
+    
+}
+
+function removeFeedback() {
+    displayFeedback('', true);
+    displayFeedback('', false);
 }
 
 // actually solve sudoku
 function solveSudoku(arr) {
 
-    return arr
+    return arr;
 }
+
+

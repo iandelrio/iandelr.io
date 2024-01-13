@@ -107,38 +107,76 @@ function cellInput() {
 
             // delete current value in cell
             currentInput.value = '';
-            // allow keypress to occur
-        }
 
+            // allow keypress to occur (call nothing)
+        }
     });
 }
 
 function sudokuHelper() {
     removeFeedback();
     const sudokuGrid = document.getElementById("sudoku-grid");
-    let originalArr, completeArr = [];
-    originalArr = getArrayFromSudoku(sudokuGrid, true);
-    completeArr = getArrayFromSudoku(sudokuGrid, false);
-    originalArr = solveSudoku(originalArr);
-    if (originalArr = false) {
-        // assume all errors mean sudoku is unsolvable
+    let originalNumsArr, allNumsArr, solutionArr, errorsArr = [];
+    originalNumsArr = getArrayFromSudoku(sudokuGrid, true);
+    allNumsArr = getArrayFromSudoku(sudokuGrid, false);
+    solutionArr = solveSudoku(originalNumsArr);
+
+    if (originalNumsArr = false) {
         displayFeedback("Puzzle cannot be solved", true);
     }
-    // compare difference between two arrays, if no difference "right track", else highlight problem cells
+
+    // check if any user errors
+    let diffFlag = false;
+    [errorsArr, diffFlag] = diffSudokuArrays(allNumsArr, solutionArr);
+
+    // testing beginning (to remove) =========
+    // diffFlag = true;
+    // errorsArr = [...Array(81).keys()].fill(true);
+    // testing end ===========================
+
+    if (!diffFlag) {
+        displayFeedback("No errors found - you're on the right track!", true);
+        return;
+    }
+
+    // go through errors list, change class of corresponding input
+    let cells = sudokuGrid.getElementsByTagName('input');
+    errorsArr.forEach((userError, i) => {
+        if (userError) {
+            cells[i].classList.remove("user-input");
+            cells[i].classList.add("user-error");
+        }
+    });
+
+    displayFeedback("Errors have been marked!", true);
 }
 
 function sudokuSolution() {
     removeFeedback();
     const sudokuGrid = document.getElementById("sudoku-grid");
-    let originalArr, completeArr = [];
-    originalArr = getArrayFromSudoku(sudokuGrid, true);
-    originalArr = solveSudoku(originalArr);
-    if (originalArr = false) {
-        // assume all errors mean sudoku is unsolvable
+    let originalNumsArr = [];
+    originalNumsArr = getArrayFromSudoku(sudokuGrid, true);
+    originalNumsArr = solveSudoku(originalNumsArr);
+
+    if (originalNumsArr === false) {
         displayFeedback("Puzzle cannot be solved", false);
         return;
     }
-    // iterate through inputs, remove "user-input" class, fill in cell vals with solution
+
+    // testing beginning (to remove) =========
+    // originalNumsArr = [...Array(81).keys()];
+    // originalNumsArr = false;
+    // testing end ===========================
+
+    // overwrite puzzle with solution
+    let cells = sudokuGrid.getElementsByTagName('input');
+    originalNumsArr.forEach((num, i) => {
+        cells[i].classList.remove("user-input");
+        cells[i].classList.remove("user-error");
+        if (num > 0) {
+            cells[i].value = num;
+        }
+    });
 }
 
 /**
@@ -175,7 +213,6 @@ function displayFeedback(msg, sourceButton) {
     } else {
         document.getElementById("sudokuSolutionFeedback").innerHTML = msg;
     }
-    
 }
 
 function removeFeedback() {
@@ -189,4 +226,17 @@ function solveSudoku(arr) {
     return arr;
 }
 
+function diffSudokuArrays(allNumsArr, solutionArr) {
+    let diffArr = [];
+    let diffFlag = false;
+    allNumsArr.forEach((num, i) => {
+        if (num === 0) {
+            diffArr.push(false);
+        } else {
+            diffArr.push(num !== solutionArr[i]);
+            diffFlag = diffFlag || num !== solutionArr[i]
+        }
 
+    });
+    return [diffArr, diffFlag];
+}

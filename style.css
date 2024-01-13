@@ -54,3 +54,9 @@ legend {
     font-style: italic;
     color: blue !important;
 }
+
+.user-error {
+    font-style: italic;
+    font-weight: bold;
+    color: red !important;
+}

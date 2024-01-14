@@ -2,6 +2,9 @@
 document.addEventListener("DOMContentLoaded", function () {
     arrowKeyNav();
     cellInput();
+    // testing to delete =====
+    // loadSudokuFromArray(examples.Med1)
+    // testing end ===========
 });
 
 function arrowKeyNav() {
@@ -123,6 +126,7 @@ function sudokuHelper() {
 
     if (originalNumsArr = false) {
         displayFeedback("Puzzle cannot be solved", true);
+        return;
     }
 
     // check if any user errors
@@ -173,9 +177,7 @@ function sudokuSolution() {
     originalNumsArr.forEach((num, i) => {
         cells[i].classList.remove("user-input");
         cells[i].classList.remove("user-error");
-        if (num > 0) {
-            cells[i].value = num;
-        }
+        if (num > 0) cells[i].value = num;
     });
 }
 
@@ -189,7 +191,7 @@ function getArrayFromSudoku(tableElem, inputType) {
     let arr = [];
     let cells = tableElem.getElementsByTagName('input');
     let cellVal = 0;
-    Array.from(cells).forEach(cell => {
+    for (let cell of cells) {
         if (cell.value === '') {
             cellVal = 0;
         } else if (inputType && cell.classList.contains("user-input")) {
@@ -198,7 +200,7 @@ function getArrayFromSudoku(tableElem, inputType) {
             cellVal = Number(cell.value);
         }
         arr.push(cellVal);
-    });
+    }
     return arr;
 }
 
@@ -220,12 +222,6 @@ function removeFeedback() {
     displayFeedback('', false);
 }
 
-// actually solve sudoku
-function solveSudoku(arr) {
-
-    return arr;
-}
-
 function diffSudokuArrays(allNumsArr, solutionArr) {
     let diffArr = [];
     let diffFlag = false;
@@ -240,3 +236,310 @@ function diffSudokuArrays(allNumsArr, solutionArr) {
     });
     return [diffArr, diffFlag];
 }
+
+function loadSudokuFromArray(arr) {
+    const sudokuGrid = document.getElementById("sudoku-grid");
+    let cells = sudokuGrid.getElementsByTagName('input');
+    arr.forEach((num, i) => {
+        cells[i].classList.remove("user-input");
+        cells[i].classList.remove("user-error");
+        if (num > 0) cells[i].value = num;
+    });
+}
+
+// actually solve sudoku (inspired by https://lisperator.net/blog/javascript-sudoku-solver/)
+function solveSudoku(board) {
+    let [index, choices] = cellWithLeastChoices(board);
+    if (index == null) return board;
+    for (let choice of choices) {
+        board[index] = choice;
+        let recursion = solveSudoku(board);
+        if (recursion !== false) return board;
+    }
+    board[index] = 0;
+    return false;
+}
+
+function cellWithLeastChoices(board) {
+    let bestCellIndex, bestCellChoices, bestLen = 100;
+    for (let i = 0; i < 81; i++) {
+        if (board[i] === 0) {
+            let choices = getChoices(board, i);
+            if (choices.length < bestLen) {
+                bestLen = choices.length;
+                bestCellChoices = choices;
+                bestCellIndex = i;
+                if (bestLen == 0) break;
+            }
+        }
+    }
+    return [bestCellIndex, bestCellChoices];
+}
+
+function getChoices(board, index) {
+    let choices = [];
+    for (let num = 1; num <= 9; num++) {
+        if (acceptable(board, index, num)) {
+            choices.push(num);
+        }
+    }
+    return choices;
+}
+
+function acceptable(board, index, value) {
+    let { row, col } = indexToPos(index);
+
+    // check column
+    for (let i = 0; i < 9; i++)
+        if (board[posToIndex(i, col)] === value) return false;
+
+    // check row
+    for (let i = 0; i < 9; i++)
+        if (board[posToIndex(row, i)] === value) return false;
+
+    // check box
+    let cornerOfBoxRow = Math.floor(row / 3) * 3;
+    let cornerOfBoxCol = Math.floor(col / 3) * 3;
+    for (let r = cornerOfBoxRow; r < cornerOfBoxRow + 3; r++) {
+        for (let c = cornerOfBoxCol; c < cornerOfBoxCol + 3; c++) {
+            if (board[posToIndex(r, c)] === value) return false;
+        }
+    }
+
+    return true;
+}
+
+// index -> { row, col }
+function indexToPos(index) {
+    return { row: Math.floor(index / 9), col: index % 9 };
+}
+
+// { row, col } -> index
+function posToIndex(row, col) {
+    return row * 9 + col;
+}
+
+const examples = {
+    Med1: [
+        0, 0, 0, 0, 0, 0, 0, 0, 6,
+        0, 3, 0, 0, 7, 1, 0, 4, 0,
+        0, 0, 0, 0, 0, 0, 8, 0, 0,
+
+        0, 0, 0, 9, 0, 8, 0, 7, 1,
+        1, 0, 3, 0, 0, 0, 0, 0, 0,
+        0, 0, 2, 0, 3, 0, 9, 0, 0,
+
+        5, 0, 7, 0, 0, 6, 0, 0, 0,
+        2, 0, 0, 0, 0, 0, 7, 0, 0,
+        0, 0, 1, 8, 0, 0, 0, 0, 2,
+    ],
+    Med1Soln: [
+        7, 2, 4, 3, 8, 9, 1, 5, 6,
+        6, 3, 8, 5, 7, 1, 2, 4, 9,
+        9, 1, 5, 6, 4, 2, 8, 3, 7,
+
+        4, 5, 6, 9, 2, 8, 3, 7, 1,
+        1, 9, 3, 7, 6, 4, 5, 2, 8,
+        8, 7, 2, 1, 3, 5, 9, 6, 4,
+        
+        5, 8, 7, 2, 9, 6, 4, 1, 3,
+        2, 6, 9, 4, 1, 3, 7, 8, 5,
+        3, 4, 1, 8, 5, 7, 6, 9, 2,
+
+    ],
+    Med2: [
+        0, 0, 0, 0, 1, 7, 2, 0, 0,
+        0, 0, 0, 4, 0, 0, 0, 0, 0,
+        0, 0, 9, 0, 0, 3, 0, 0, 0,
+
+        4, 0, 0, 7, 8, 0, 5, 0, 0,
+        0, 2, 5, 0, 0, 0, 8, 0, 0,
+        0, 0, 0, 6, 0, 0, 0, 0, 0,
+
+        6, 0, 1, 5, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 6, 0, 3, 0,
+        2, 0, 0, 0, 0, 1, 7, 0, 4,
+    ],
+    Med3: [
+        9, 0, 0, 5, 0, 1, 7, 0, 0,
+        2, 0, 1, 0, 0, 9, 0, 0, 0,
+        0, 0, 0, 8, 7, 0, 0, 9, 0,
+
+        0, 8, 0, 0, 6, 4, 0, 7, 0,
+        0, 0, 0, 0, 0, 0, 2, 1, 0,
+        0, 0, 0, 0, 9, 0, 0, 0, 0,
+
+        7, 0, 6, 2, 4, 0, 0, 0, 0,
+        0, 4, 0, 0, 0, 0, 0, 0, 6,
+        1, 0, 0, 0, 0, 0, 0, 4, 0,
+    ],
+    Med4: [
+        0, 0, 0, 0, 3, 0, 5, 7, 0,
+        0, 0, 2, 0, 0, 8, 0, 0, 0,
+        6, 0, 0, 0, 0, 0, 0, 0, 0,
+
+        0, 3, 0, 5, 7, 0, 0, 4, 0,
+        0, 0, 0, 4, 0, 0, 0, 0, 2,
+        0, 0, 5, 6, 0, 0, 7, 1, 8,
+
+        0, 7, 8, 0, 0, 0, 0, 0, 0,
+        0, 0, 6, 7, 0, 9, 0, 0, 1,
+        0, 0, 0, 0, 0, 0, 0, 2, 0,
+    ],
+    Hard1: [
+        8, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 3, 6, 0, 0, 0, 0, 0,
+        0, 7, 0, 0, 9, 0, 2, 0, 0,
+
+        0, 5, 0, 0, 0, 7, 0, 0, 0,
+        0, 0, 0, 0, 4, 5, 7, 0, 0,
+        0, 0, 0, 1, 0, 0, 0, 3, 0,
+
+        0, 0, 1, 0, 0, 0, 0, 6, 8,
+        0, 0, 8, 5, 0, 0, 0, 1, 0,
+        0, 9, 0, 0, 0, 0, 4, 0, 0,
+    ],
+    Hard2: [
+        0, 0, 3, 9, 0, 0, 0, 0, 0,
+        4, 0, 0, 0, 8, 0, 0, 3, 6,
+        0, 0, 8, 0, 0, 0, 1, 0, 0,
+
+        0, 4, 0, 0, 6, 0, 0, 7, 3,
+        8, 0, 0, 0, 0, 0, 0, 1, 0,
+        0, 0, 0, 0, 0, 2, 0, 0, 0,
+
+        0, 0, 4, 0, 7, 0, 0, 6, 8,
+        6, 0, 0, 0, 0, 0, 0, 0, 0,
+        7, 0, 0, 0, 0, 0, 5, 0, 0,
+    ],
+    Hard3: [
+        0, 0, 0, 8, 0, 1, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 4, 3,
+        5, 0, 0, 0, 0, 0, 0, 0, 0,
+
+        0, 0, 0, 0, 7, 0, 8, 0, 0,
+        0, 0, 0, 0, 0, 0, 1, 0, 0,
+        0, 2, 0, 0, 3, 0, 0, 0, 0,
+
+        6, 0, 0, 0, 0, 0, 0, 7, 5,
+        0, 0, 3, 4, 0, 0, 0, 0, 0,
+        0, 0, 0, 2, 0, 0, 6, 0, 0,
+    ],
+    Temp1: [
+        0, 0, 0, 7, 4, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 5, 0, 0, 0,
+        0, 1, 0, 0, 0, 0, 0, 0, 5,
+
+        3, 0, 0, 2, 0, 0, 0, 0, 0,
+        0, 2, 8, 0, 0, 0, 0, 5, 4,
+        0, 0, 5, 0, 6, 0, 8, 9, 0,
+
+        4, 3, 0, 9, 0, 7, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 6,
+        8, 0, 0, 0, 0, 2, 0, 3, 0,
+    ],
+    Temp2: [
+        0, 0, 0, 0, 0, 6, 0, 8, 5,
+        0, 0, 3, 0, 0, 0, 9, 0, 7,
+        0, 1, 0, 0, 4, 0, 0, 0, 0,
+
+        1, 8, 0, 9, 0, 0, 0, 0, 0,
+        0, 0, 7, 0, 0, 0, 3, 0, 0,
+        0, 4, 0, 0, 0, 0, 0, 0, 0,
+
+        8, 0, 0, 7, 6, 0, 0, 3, 0,
+        0, 0, 0, 0, 0, 1, 0, 0, 9,
+        0, 0, 0, 0, 9, 4, 2, 0, 0,
+    ],
+    Temp3: [
+        0, 0, 0, 0, 0, 0, 5, 2, 8,
+        4, 7, 0, 0, 1, 0, 0, 0, 0,
+        0, 0, 3, 8, 0, 0, 0, 0, 0,
+
+        0, 0, 1, 7, 8, 0, 0, 0, 3,
+        0, 0, 0, 0, 0, 0, 0, 9, 0,
+        0, 0, 0, 0, 4, 0, 0, 0, 1,
+
+        0, 0, 0, 9, 5, 8, 7, 0, 0,
+        5, 0, 0, 0, 0, 3, 0, 0, 0,
+        0, 2, 0, 0, 0, 0, 6, 0, 0,
+    ],
+    Temp4: [
+        0, 0, 0, 0, 0, 0, 4, 0, 3,
+        0, 0, 0, 6, 0, 0, 0, 0, 0,
+        0, 0, 0, 8, 0, 0, 0, 0, 0,
+
+        0, 0, 0, 9, 0, 0, 0, 8, 0,
+        0, 2, 0, 0, 0, 0, 0, 9, 0,
+        0, 7, 0, 0, 1, 0, 0, 0, 0,
+
+        5, 0, 0, 0, 4, 0, 1, 0, 0,
+        8, 0, 0, 0, 0, 0, 3, 0, 0,
+        9, 0, 6, 0, 0, 0, 0, 0, 0,
+    ],
+    Temp5: [
+        0, 0, 0, 0, 7, 0, 8, 0, 0,
+        6, 0, 0, 0, 0, 0, 0, 0, 3,
+        0, 0, 0, 0, 0, 0, 5, 0, 0,
+
+        5, 0, 0, 3, 0, 0, 1, 0, 0,
+        9, 0, 0, 6, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 9, 0, 0, 0,
+
+        0, 4, 7, 0, 0, 0, 0, 9, 0,
+        0, 8, 0, 0, 1, 0, 0, 0, 0,
+        0, 0, 0, 5, 0, 0, 0, 0, 0,
+    ],
+    Temp6: [
+        0, 8, 0, 0, 0, 0, 5, 0, 0,
+        9, 0, 0, 3, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+
+        0, 5, 0, 0, 4, 0, 8, 0, 0,
+        0, 0, 0, 7, 0, 0, 0, 3, 0,
+        6, 1, 0, 0, 0, 0, 0, 0, 0,
+
+        0, 0, 0, 0, 5, 0, 1, 0, 0,
+        3, 0, 0, 9, 0, 0, 0, 0, 0,
+        7, 0, 0, 0, 0, 0, 0, 0, 8,
+    ],
+    Temp7: [
+        0, 5, 0, 0, 0, 0, 9, 3, 0,
+        4, 0, 0, 8, 0, 0, 2, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+
+        0, 2, 0, 0, 0, 3, 0, 0, 0,
+        0, 0, 0, 0, 5, 0, 0, 7, 0,
+        9, 0, 0, 0, 0, 0, 0, 0, 4,
+
+        7, 0, 6, 4, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 3, 0, 0,
+        0, 0, 0, 7, 0, 0, 0, 0, 0,
+    ],
+    Temp8: [
+        0, 0, 0, 0, 0, 0, 0, 8, 3,
+        0, 9, 0, 1, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+
+        0, 0, 0, 0, 3, 5, 1, 0, 0,
+        8, 0, 0, 0, 7, 0, 0, 0, 0,
+        0, 6, 0, 0, 0, 0, 9, 0, 0,
+
+        0, 0, 0, 6, 0, 0, 4, 9, 0,
+        3, 0, 0, 4, 0, 0, 0, 0, 0,
+        7, 0, 0, 0, 0, 0, 0, 0, 0,
+    ],
+    Temp9: [
+        0, 0, 0, 0, 4, 0, 6, 9, 0,
+        3, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 5, 0, 0,
+
+        0, 0, 0, 5, 0, 1, 0, 0, 8,
+        0, 0, 7, 3, 0, 0, 0, 0, 0,
+        0, 4, 0, 0, 0, 0, 9, 0, 0,
+
+        1, 0, 0, 0, 0, 0, 0, 0, 3,
+        0, 9, 0, 0, 0, 0, 0, 7, 0,
+        0, 0, 0, 8, 0, 0, 0, 0, 0,
+    ]
+};

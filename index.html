@@ -14,15 +14,13 @@
 
 <body>
 
-    <div class="container-fluid p-1 bg-dark text-white text-center">
-        <h1>Sudoku Buddy</h1>
-        <p>Here to help when things go wrong!</p>
+    <div class="container-fluid p-1 bg-dark text-white text-left">
+        <h1 class="banner">Sudoku Buddy</h1>
+        <p class="banner">Here to help when things go wrong!</p>
     </div>
 
     <div class="container-fluid pt-3">
         <div class="row">
-            <div class="col-sm-1">
-            </div>
             <div class="col-sm-4 text-center">
                 <!-- ID POS CONVENTION - Y X, I.E. ROW COLUMN -->
                 <table class="table table-sm" id="sudoku-grid">
@@ -152,6 +150,10 @@
                     <button type="button" class="btn btn-secondary" onclick="sudokuSolution()"> Show Solution </button>
                 </div>
                 <p id="sudokuSolutionFeedback"></p>
+                <div class="d-grid">
+                    <button type="button" class="btn btn-primary" onclick="loadDemo()"> Load Sample Sudoku </button>
+                </div>
+                <p></p>
             </div>
             <div class="col-sm-1">
             </div>

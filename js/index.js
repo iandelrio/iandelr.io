@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     arrowKeyNav();
     cellInput();
     // testing to delete =====
-    loadSudokuFromArray(examples.Med1)
+    // loadSudokuFromArray(examples.Hard3)
     // testing end ===========
 });
 
@@ -181,6 +181,11 @@ function sudokuSolution() {
     });
 }
 
+function loadDemo() {
+    removeFeedback();
+    loadSudokuFromArray(examples.Med1)
+}
+
 /**
  * Function to convert table element representing sudoku board to array
  * @param {table} tableElem Table element representing sudoku board
@@ -247,7 +252,11 @@ function loadSudokuFromArray(arr) {
     arr.forEach((num, i) => {
         cells[i].classList.remove("user-input");
         cells[i].classList.remove("user-error");
-        if (num > 0) cells[i].value = num;
+        if (num === 0) {
+            cells[i].value = '';
+        } else {
+            cells[i].value = num;
+        }
     });
 }
 
@@ -345,7 +354,7 @@ const examples = {
         4, 5, 6, 9, 2, 8, 3, 7, 1,
         1, 9, 3, 7, 6, 4, 5, 2, 8,
         8, 7, 2, 1, 3, 5, 9, 6, 4,
-        
+
         5, 8, 7, 2, 9, 6, 4, 1, 3,
         2, 6, 9, 4, 1, 3, 7, 8, 5,
         3, 4, 1, 8, 5, 7, 6, 9, 2,

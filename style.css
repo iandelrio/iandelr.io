@@ -60,3 +60,7 @@ legend {
     font-weight: bold;
     color: red !important;
 }
+
+.banner {
+    padding-left: 10px;
+}

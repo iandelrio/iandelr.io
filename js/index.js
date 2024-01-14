@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     arrowKeyNav();
     cellInput();
     // testing to delete =====
-    // loadSudokuFromArray(examples.Med1)
+    loadSudokuFromArray(examples.Med1)
     // testing end ===========
 });
 
@@ -84,7 +84,7 @@ function cellInput() {
         const key = event.key;
 
         // check if input is not a number
-        if (key === "Backspace") {
+        if (key === "Backspace" || key === "Tab") {
             // allow keypress to occur
 
         } else if (isNaN(key)) {
@@ -124,8 +124,8 @@ function sudokuHelper() {
     allNumsArr = getArrayFromSudoku(sudokuGrid, false);
     solutionArr = solveSudoku(originalNumsArr);
 
-    if (originalNumsArr = false) {
-        displayFeedback("Puzzle cannot be solved", true);
+    if (solutionArr === false) {
+        displayFeedback("Puzzle is unsolvable! Please make sure numbers were input correctly.", true);
         return;
     }
 
@@ -194,7 +194,7 @@ function getArrayFromSudoku(tableElem, inputType) {
     for (let cell of cells) {
         if (cell.value === '') {
             cellVal = 0;
-        } else if (inputType && cell.classList.contains("user-input")) {
+        } else if (inputType && isUserCell(cell)) {
             cellVal = 0;
         } else {
             cellVal = Number(cell.value);
@@ -202,6 +202,10 @@ function getArrayFromSudoku(tableElem, inputType) {
         arr.push(cellVal);
     }
     return arr;
+}
+
+function isUserCell(inputElem) {
+    return inputElem.classList.contains("user-input") || inputElem.classList.contains("user-error");
 }
 
 /**

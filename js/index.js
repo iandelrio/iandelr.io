@@ -253,7 +253,7 @@ function loadSudokuFromArray(arr) {
         cells[i].classList.remove("user-input");
         cells[i].classList.remove("user-error");
         if (num === 0) {
-            cells[i].value = '';
+            cells[i].value = ' ';
         } else {
             cells[i].value = num;
         }

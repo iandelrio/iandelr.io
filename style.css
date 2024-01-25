@@ -1,80 +1,56 @@
-/* Doesn't work on iOS Safari */
-/* #sudoku-grid {
-    aspect-ratio: 1 / 1;
-} */
 
-/* Temporary solution, not flexible */
-/* #sudoku-grid {
-    height: 24em;
-} */
-
-/* #sudoku-grid:before {
-    content: "";
+:root {
+    --highlight-color: rgb(10, 166, 193);
+    --primary-color: rgba(240, 240, 240, 0.9);
+    --secondary-color: rgba(170, 170, 170, 0.6);
+    --tertiary-color: rgba(150, 150, 150, 0.6);
+    --background-color: rgba(30, 30, 30, 1);
+    --default-font: "Kumbh Sans", system-ui;
+  }
+  
+  html {
+    font-size: 100%;
+    background-color: var(--background-color);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  body {
+    height: 50%;
+    color: var(--primary-color);
+    font-family: var(--default-font);
+    text-shadow: 0px 0px 5px var(--tertiary-color);
+    margin: 5vw;
+    max-width: 600px;
+  }
+  
+  .background {
+    position: absolute;
     display: block;
-    padding-top: 100%;
-} */
-
-#sudoku-grid td {
-    border: 1px solid;
-    text-align: center;
-    /* width: 1em;
-    height: 1em; */
-    aspect-ratio: 1 / 1;
-}
-
-#sudoku-grid td:first-child {
-    border-left: solid;
-}
-
-#sudoku-grid td:nth-child(3n) {
-    border-right: solid;
-}
-
-#sudoku-grid tr:first-child {
-    border-top: solid;
-}
-
-#sudoku-grid tr:nth-child(3n) td {
-    border-bottom: solid;
-}
-
-#sudoku-grid input {
-    text-align: center;
-    vertical-align: middle;
-    /* width: 100%; */
-    /* height: 100%; */
-    aspect-ratio: 1 / 1;
-    border: none !important;
-    outline: none !important;
-    box-shadow: none !important;
-    padding: 0px;
-    /* To implement dynamic font re-sizing */
-    /* font-size: 0.5em; */
-}
-
-fieldset {
-    border: solid 1px
-}
-
-legend {
-    font-size: 1.2em;
-}
-
-.form-check-label {
-    font-size: 0.9em
-}
-
-.user-input {
-    font-style: italic;
-    color: blue !important;
-}
-
-.user-error {
-    font-style: italic;
+    top: 0;
+    left: 0;
+    z-index: -1;
+  }
+  
+  a {
+    text-decoration: none;
+    color: var(--primary-color);
     font-weight: bold;
-    color: red !important;
-}
+  }
 
-/* .banner {
-    padding-left: 10px;
-} */
+  .fa:hover {
+    color: var(--highlight-color);
+}
+  
+  .home-icons {
+    font-size: 200%;
+  }
+  
+  .picture {
+    width: 150px;
+    height: 150px;
+    border-radius: 35px;
+    vertical-align: middle;
+    margin-right: 10px;
+  }

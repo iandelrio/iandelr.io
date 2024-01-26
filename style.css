@@ -1,56 +1,72 @@
-
 :root {
     --highlight-color: rgb(10, 166, 193);
     --primary-color: rgba(240, 240, 240, 0.9);
     --secondary-color: rgba(170, 170, 170, 0.6);
     --tertiary-color: rgba(150, 150, 150, 0.6);
     --background-color: rgba(30, 30, 30, 1);
-    --default-font: "Kumbh Sans", system-ui;
-  }
-  
-  html {
+    --default-font: "Poppins", system-ui;
+}
+
+html {
     font-size: 100%;
     background-color: var(--background-color);
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-  }
-  
-  body {
+}
+
+body {
     height: 50%;
     color: var(--primary-color);
     font-family: var(--default-font);
     text-shadow: 0px 0px 5px var(--tertiary-color);
     margin: 5vw;
     max-width: 600px;
-  }
-  
-  .background {
+}
+
+.background {
     position: absolute;
     display: block;
     top: 0;
     left: 0;
     z-index: -1;
-  }
-  
-  a {
+}
+
+a {
     text-decoration: none;
     color: var(--primary-color);
     font-weight: bold;
-  }
+    margin-right: 2%;
 
-  .fa:hover {
+}
+
+.fa:hover {
     color: var(--highlight-color);
 }
-  
-  .home-icons {
+
+.home-icons {
     font-size: 200%;
-  }
-  
-  .picture {
+    margin-top: 0px;
+}
+
+.new-section {
+    margin-top: 5vh;
+}
+
+.picture {
     width: 150px;
     height: 150px;
     border-radius: 35px;
     vertical-align: middle;
     margin-right: 10px;
-  }
+}
+
+.subheader {
+    font-style: italic;
+    margin-top: 0px;
+    font-size: 80%;
+}
+
+.header {
+    margin-bottom: 0px
+}
